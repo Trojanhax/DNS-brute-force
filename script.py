@@ -1,10 +1,12 @@
-import subprocess
 import argparse
+import subprocess
+
 
 def host_lookup(ip, domain):
-  """Performs a DNS lookup for the given IP address and domain."""
-  result = subprocess.run(["host", f"{ip}.{domain}"], capture_output=True, text=True)
-  return result.stdout
+    """Performs a DNS lookup for the given IP address and domain."""
+    result = subprocess.run(["host", f"{ip}.{domain}"], capture_output=True, text=True)
+    return result.stdout
+
 
 def main():
     parser = argparse.ArgumentParser(description='Resolve IP addresses to domain names using the host command.')
@@ -17,9 +19,7 @@ def main():
     # Read the IP addresses from the file
     ips = []
     with open(args.file, 'r') as f:
-        for line in f:
-            ips.append(line.strip())
-
+        ips.extend(line.strip() for line in f)
     # Perform DNS lookups for all IP addresses
     results = []
     for ip in ips:
@@ -30,6 +30,7 @@ def main():
     with open(args.output, 'w') as output_file:
         for result in results:
             output_file.write(result)
+
 
 if __name__ == '__main__':
     main()
